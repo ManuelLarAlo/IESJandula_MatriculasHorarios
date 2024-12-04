@@ -44,21 +44,19 @@ public class MatriculasController
 			
 			)
 	{
-		
-		Scanner scanner = null;
+		File file=(File) csv;
 		try
 		{
-			scanner = new Scanner(new File("src/main/resources/cursos.csv"));
-			// PARSEAMOS LA FECHA CON UN FORMATO ESPECIFICO
+			Scanner scanner = new Scanner(file);
 			scanner.nextLine();
 			while (scanner.hasNextLine())
 			{
 				IdCursoEtapa idCursoEtapa         = new IdCursoEtapa();
 				CursoEtapaEntity cursoEtapaEntity = new CursoEtapaEntity();
-				String line = scanner.nextLine();
-				StringTokenizer tokenizer = new StringTokenizer(line, ",");
-				idCursoEtapa.setCurso(Integer.parseInt(tokenizer.nextToken()));
-				idCursoEtapa.setEtapa(tokenizer.nextToken());
+				String linea = scanner.nextLine();
+				String[] lineaDelFicheroTroceada = linea.split(",");
+				idCursoEtapa.setCurso(Integer.parseInt(lineaDelFicheroTroceada[0]));
+				idCursoEtapa.setEtapa(lineaDelFicheroTroceada[1]);
 				cursoEtapaEntity.setIdCursoEtapa(idCursoEtapa);
 				this.iCursoRepository.saveAndFlush(cursoEtapaEntity);
 			}
@@ -67,10 +65,6 @@ public class MatriculasController
 		{
 			
 			return ResponseEntity.status(500).body("Error de servidor"+exception);
-		}
-		finally 
-		{
-			scanner.close();
 		}
 		return ResponseEntity.ok().body(200);
 	}
@@ -88,41 +82,36 @@ public class MatriculasController
 								@RequestPart( value = "csv") MultipartFile csv 
 			)
 	{
-		Scanner scanner = null;
 		IdCursoEtapa idCursoEtapa         = new IdCursoEtapa();
 		CursoEtapaEntity cursoEtapaEntity = new CursoEtapaEntity();
 		DatosBrutoAlumnoMatriculaEntity datosBrutoAlumnoMatriculaEntity = new DatosBrutoAlumnoMatriculaEntity();
 		try 
 		{
+			File file=(File) csv;
 			//rellenamos el la clave primaria de la tabla CursoEntity
 			idCursoEtapa.setCurso(curso);
 			idCursoEtapa.setEtapa(etapa);
 			cursoEtapaEntity.setIdCursoEtapa(idCursoEtapa);
-			scanner = new Scanner(new File("src/main/resources/alumnos.csv"));
+			Scanner scanner = new Scanner(file);
 			// PARSEAMOS LA FECHA CON UN FORMATO ESPECIFICO
 			scanner.nextLine();
 			while (scanner.hasNextLine())
 			{
 				
-				String line = scanner.nextLine();
-				StringTokenizer tokenizer = new StringTokenizer(line, ",");
-				datosBrutoAlumnoMatriculaEntity.setNombre(tokenizer.nextToken());
-				datosBrutoAlumnoMatriculaEntity.setApellidos(tokenizer.nextToken());
-				datosBrutoAlumnoMatriculaEntity.setAsignatura(tokenizer.nextToken());
+				String linea = scanner.nextLine();
+				String[] lineaDelFicheroTroceada = linea.split(",");
+				datosBrutoAlumnoMatriculaEntity.setNombre(lineaDelFicheroTroceada[0]);
+				datosBrutoAlumnoMatriculaEntity.setApellidos(lineaDelFicheroTroceada[1]);
+				datosBrutoAlumnoMatriculaEntity.setAsignatura(lineaDelFicheroTroceada[2]);
 				datosBrutoAlumnoMatriculaEntity.setCursoEtapa(cursoEtapaEntity);
 				this.iDatosBrutoAlumnoMatricula.saveAndFlush(datosBrutoAlumnoMatriculaEntity); 	
 			}
 		} 
 		catch (FileNotFoundException e) 
 		{
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
-		finally 
-		{
-			scanner.close();
-		}
-		
 	}
 	
 	/**
@@ -142,7 +131,8 @@ public class MatriculasController
 	{
 		List<DatosBrutoAlumnoMatriculaEntity> datosBrutoAlumnoMatriculaList= this.iDatosBrutoAlumnoMatricula.findAll();
 		return ResponseEntity.status(200).body(datosBrutoAlumnoMatriculaList);
-	}
+	}	
+	
 
 }
 
