@@ -1,12 +1,16 @@
-package es.iesjandula.MatriculasHorarios.modelsnew.ids;
+package es.iesjandula.MatriculasHorarios.models.ids;
 
 import java.io.Serializable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Embeddable
 public class IdCursoEtapaGrupo implements Serializable
 {
@@ -23,4 +27,5 @@ public class IdCursoEtapaGrupo implements Serializable
 	
 	@Column(length = 1)
 	private char grupo;
+	
 }

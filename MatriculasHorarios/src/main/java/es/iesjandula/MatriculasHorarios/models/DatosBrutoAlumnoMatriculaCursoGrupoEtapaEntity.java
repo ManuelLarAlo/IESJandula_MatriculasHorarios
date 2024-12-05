@@ -1,4 +1,4 @@
-package es.iesjandula.MatriculasHorarios.modelsnew;
+package es.iesjandula.MatriculasHorarios.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Datos_Bruto_Alumno_Matriculas")
-public class DatosBrutoAlumnoMatriculasEntity 
+@Table(name = "Datos_Bruto_Alumno_Matricula_curso_grupo_etapa")
+public class DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity 
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,10 @@ public class DatosBrutoAlumnoMatriculasEntity
     
     @Column(length = 100)
     private String apellidos;
+    
+    @Column(length = 100)
+    private String asignatura;
 
     @ManyToOne
-    private CursoEtapaGrupo cursoEtapaGrupo;
+    private CursoEtapaGrupoEntity cursoEtapaGrupo;
 }

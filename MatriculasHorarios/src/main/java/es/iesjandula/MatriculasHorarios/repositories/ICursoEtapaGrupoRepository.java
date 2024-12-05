@@ -1,0 +1,17 @@
+package es.iesjandula.MatriculasHorarios.repositories;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import es.iesjandula.MatriculasHorarios.models.CursoEtapaGrupoEntity;
+import es.iesjandula.MatriculasHorarios.models.ids.IdCursoEtapaGrupo;
+
+@Repository
+public interface ICursoEtapaGrupoRepository extends JpaRepository<CursoEtapaGrupoEntity, IdCursoEtapaGrupo>
+{
+	List<CursoEtapaGrupoEntity> findGrupoByCursoAndEtapa(int curso, String etapa);
+	
+	List<CursoEtapaGrupoEntity> findGrupoByCursoAndEtapaOrderByGrupoAsc(int curso, String etapa);
+}
