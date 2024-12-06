@@ -23,4 +23,11 @@ public interface IDatosBrutoAlumnoMatriculaCursoEtapaGrupo extends JpaRepository
 	List<DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity> encontrarAlumnosSinGrupo(@Param("curso") Integer curso,
 																				  @Param("etapa") String etapa
 																				 );
+	
+	@Query("UPDATE Datos_Bruto_Alumno_Matricula_curso_grupo_etapa a " +
+		       "SET a.grupo = NULL " +
+		       "WHERE a.curso = :curso AND a.etapa = :etapa AND a.grupo = :grupo")
+		void borrarGrupo(@Param("curso") Integer curso,
+		                 @Param("etapa") String etapa,
+		                 @Param("grupo") char grupo);
 }

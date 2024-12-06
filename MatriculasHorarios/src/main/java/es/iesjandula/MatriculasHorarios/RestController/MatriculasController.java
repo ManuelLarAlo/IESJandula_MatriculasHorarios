@@ -317,5 +317,29 @@ public class MatriculasController
 		}
 		
 	}
+	
+	@RequestMapping(method = RequestMethod.DELETE ,value = "/Alumnos")
+	public ResponseEntity<?>borrarGrupo(
+											@RequestParam(required = true)char grupo,
+											@RequestParam(required = true)String etapa,
+											@RequestParam(required = true)Integer curso
+			
+			)
+	{
+		iDatosBrutoAlumnoMatriculaCursoEtapaGrupo.borrarGrupo(curso,etapa,grupo);
+		return ResponseEntity.status(200).body("El grupo se ha borrado correctamente");
+		
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE ,value = "/Alumnos")
+	public ResponseEntity<?>borrarAlumno(
+											@RequestBody(required = true) DatosBrutoAlumnoMatriculaEntity datosBrutoAlumnoMatriculaEntity
+			
+			)
+	{
+		iDatosBrutoAlumnoMatriculaCursoEtapaGrupo.borrarGrupo(curso,etapa,grupo);
+		return ResponseEntity.status(200).body("El grupo se ha borrado correctamente");
+		
+	}
 }
 
