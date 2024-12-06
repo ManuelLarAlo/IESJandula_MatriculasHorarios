@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -264,5 +265,57 @@ public class MatriculasController
 		
 	}
 	
+	/*
+	 * Endpoint para obtener todos los alumnos de un grupo
+	 */
+	@RequestMapping(method = RequestMethod.GET ,value = "/AlumnosGrupo")
+	public ResponseEntity<?>obetenerAlumnosGrupo(
+													@RequestParam(required = true)char grupo,
+													@RequestParam(required = true)String etapa,
+													@RequestParam(required = true)Integer curso
+			)
+	{
+		try 
+		{
+			List<DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity>AlumnosGrupoList = iDatosBrutoAlumnoMatriculaCursoEtapaGrupo.encontrarAlumnosPorGrupo(curso, etapa, grupo);
+			if (AlumnosGrupoList.isEmpty())
+			{
+				throw new MatriculasException(404, "No se ha seleccionado ningun alumno");
+			}
+			return ResponseEntity.status(200).body(AlumnosGrupoList);
+		} 
+		catch (MatriculasException matriculasException)
+		{
+			String error = "Error del servidor";
+			log.error(error);
+			return ResponseEntity.status(500).body(error+matriculasException);
+		}
+		
+	}
+	
+	@RequestMapping(method = RequestMethod.GET ,value = "/AlumnosSinGrupo")
+	public ResponseEntity<?>obetenerAlumnosSinGrupo(
+													
+													@RequestParam(required = true)String etapa,
+													@RequestParam(required = true)Integer curso
+			)
+	{
+		try 
+		{
+			List<DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity>AlumnosGrupoList = iDatosBrutoAlumnoMatriculaCursoEtapaGrupo.encontrarAlumnosSinGrupo(curso, etapa);
+			if (AlumnosGrupoList.isEmpty())
+			{
+				throw new MatriculasException(404, "No se ha seleccionado ningun alumno");
+			}
+			return ResponseEntity.status(200).body(AlumnosGrupoList);
+		} 
+		catch (MatriculasException matriculasException)
+		{
+			String error = "Error del servidor";
+			log.error(error);
+			return ResponseEntity.status(500).body(error+matriculasException);
+		}
+		
+	}
 }
 

@@ -16,4 +16,11 @@ public interface IDatosBrutoAlumnoMatriculaCursoEtapaGrupo extends JpaRepository
 	List<DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity> encontrarAlumnosPorGrupo(@Param("curso") Integer curso,
 																				  @Param("etapa") String etapa,
 																				  @Param("grupo") char grupo);
+	
+	
+	@Query("SELECT a FROM Datos_Bruto_Alumno_Matricula_curso_grupo_etapa a " +
+		       "WHERE a.curso = :curso AND a.etapa = :etapa AND a.grupo IS NULL")
+	List<DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity> encontrarAlumnosSinGrupo(@Param("curso") Integer curso,
+																				  @Param("etapa") String etapa
+																				 );
 }
