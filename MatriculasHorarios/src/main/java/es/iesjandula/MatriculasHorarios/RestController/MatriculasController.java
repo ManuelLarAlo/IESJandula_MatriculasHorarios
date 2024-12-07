@@ -322,23 +322,35 @@ public class MatriculasController
 	public ResponseEntity<?>borrarGrupo(
 											@RequestParam(required = true)char grupo,
 											@RequestParam(required = true)String etapa,
-											@RequestParam(required = true)Integer curso
-			
-			)
+											@RequestParam(required = true)Integer curso) throws MatriculasException
 	{
-		iDatosBrutoAlumnoMatriculaCursoEtapaGrupo.borrarGrupo(curso,etapa,grupo);
+		CursoEtapaGrupoEntity cursoEtapaGrupo = new CursoEtapaGrupoEntity();
+		IdCursoEtapaGrupo idCursoEtapaGrupo = new IdCursoEtapaGrupo(curso, etapa, grupo);
+		cursoEtapaGrupo.setIdCursoEtapaGrupo(idCursoEtapaGrupo);
+		
+		if (iCursoEtapaGrupoRepository.findById(idCursoEtapaGrupo).isEmpty())
+		{
+			String error = "No se ha encontrado el grupo";
+			log.error(error);
+			throw new MatriculasException(404, error );
+		}
+		
+		iCursoEtapaGrupoRepository.delete(cursoEtapaGrupo);
+		
 		return ResponseEntity.status(200).body("El grupo se ha borrado correctamente");
 		
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE ,value = "/Alumnos")
 	public ResponseEntity<?>borrarAlumno(
-											@RequestBody(required = true) DatosBrutoAlumnoMatriculaEntity datosBrutoAlumnoMatriculaEntity
+											@RequestBody(required = true) DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity datosBrutoAlumnoMatriculaEntityAlumnoMatriculaCursoGrupoEtapaEntity
 			
 			)
 	{
-		iDatosBrutoAlumnoMatriculaCursoEtapaGrupo.borrarGrupo(curso,etapa,grupo);
-		return ResponseEntity.status(200).body("El grupo se ha borrado correctamente");
+		iDatosBrutoAlumnoMatriculaCursoEtapaGrupo.borrarGrupo(datosBrutoAlumnoMatriculaEntityAlumnoMatriculaCursoGrupoEtapaEntity.getCursoEtapaGrupo().getIdCursoEtapaGrupo().getCurso(),
+															  datosBrutoAlumnoMatriculaEntityAlumnoMatriculaCursoGrupoEtapaEntity.getCursoEtapaGrupo().getIdCursoEtapaGrupo().getEtapa(),
+															  datosBrutoAlumnoMatriculaEntityAlumnoMatriculaCursoGrupoEtapaEntity.getCursoEtapaGrupo().getIdCursoEtapaGrupo().getGrupo());
+		return ResponseEntity.status(200).body("El alumno se ha borrado del grupo correctamente");
 		
 	}
 }
