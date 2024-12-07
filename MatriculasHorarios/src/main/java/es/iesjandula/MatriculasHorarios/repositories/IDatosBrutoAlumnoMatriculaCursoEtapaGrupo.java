@@ -12,22 +12,37 @@ import es.iesjandula.MatriculasHorarios.models.DatosBrutoAlumnoMatriculaCursoGru
 @Repository
 public interface IDatosBrutoAlumnoMatriculaCursoEtapaGrupo extends JpaRepository<DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity , Integer>
 {
-	@Query("SELECT a FROM Datos_Bruto_Alumno_Matricula_curso_grupo_etapa a WHERE a.curso = :curso AND a.etapa = :etapa AND (a.grupo = null OR a.grupo = :grupo) ")
-	List<DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity> encontrarAlumnosPorGrupo(@Param("curso") Integer curso,
-																				  @Param("etapa") String etapa,
-																				  @Param("grupo") char grupo);
+	@Query("SELECT a FROM DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity a " +
+		       "WHERE a.cursoEtapaGrupo.idCursoEtapaGrupo.curso = :curso " +
+		       "AND a.cursoEtapaGrupo.idCursoEtapaGrupo.etapa = :etapa " +
+		       "AND (a.cursoEtapaGrupo.idCursoEtapaGrupo.grupo IS NULL OR a.cursoEtapaGrupo.idCursoEtapaGrupo.grupo = :grupo)")
+		List<DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity> encontrarAlumnosPorGrupo(
+		    @Param("curso") Integer curso,
+		    @Param("etapa") String etapa,
+		    @Param("grupo") char grupo
+		);
+
 	
 	
-	@Query("SELECT a FROM Datos_Bruto_Alumno_Matricula_curso_grupo_etapa a " +
-		       "WHERE a.curso = :curso AND a.etapa = :etapa AND a.grupo IS NULL")
-	List<DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity> encontrarAlumnosSinGrupo(@Param("curso") Integer curso,
-																				  @Param("etapa") String etapa
-																				 );
+	@Query("SELECT a FROM DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity a " +
+		       "WHERE a.cursoEtapaGrupo.idCursoEtapaGrupo.curso = :curso " +
+		       "AND a.cursoEtapaGrupo.idCursoEtapaGrupo.etapa = :etapa " +
+		       "AND a.cursoEtapaGrupo.idCursoEtapaGrupo.grupo IS NULL")
+		List<DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity> encontrarAlumnosSinGrupo(
+		    @Param("curso") Integer curso,
+		    @Param("etapa") String etapa
+		);
+
 	
-	@Query("UPDATE Datos_Bruto_Alumno_Matricula_curso_grupo_etapa a " +
-		       "SET a.grupo = NULL " +
-		       "WHERE a.curso = :curso AND a.etapa = :etapa AND a.grupo = :grupo")
-		void borrarGrupo(@Param("curso") Integer curso,
-		                 @Param("etapa") String etapa,
-		                 @Param("grupo") char grupo);
+	@Query("UPDATE DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity a " +
+		       "SET a.cursoEtapaGrupo.idCursoEtapaGrupo.grupo = NULL " +
+		       "WHERE a.cursoEtapaGrupo.idCursoEtapaGrupo.curso = :curso " +
+		       "AND a.cursoEtapaGrupo.idCursoEtapaGrupo.etapa = :etapa " +
+		       "AND a.cursoEtapaGrupo.idCursoEtapaGrupo.grupo = :grupo")
+		void borrarGrupo(
+		    @Param("curso") Integer curso,
+		    @Param("etapa") String etapa,
+		    @Param("grupo") char grupo
+		);
+
 }

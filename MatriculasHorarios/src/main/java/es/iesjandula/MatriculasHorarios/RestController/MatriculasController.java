@@ -160,7 +160,7 @@ public class MatriculasController
 	public ResponseEntity <?> obtenerGrupos(@RequestHeader(required = true) int curso,
 			   @RequestHeader(required = true) String etapa) throws MatriculasException
 	{
-		List<CursoEtapaGrupoEntity>listaGrupo = this.iCursoEtapaGrupoRepository.findGrupoByCursoAndEtapa(curso, etapa);
+		List<CursoEtapaGrupoEntity>listaGrupo = this.iCursoEtapaGrupoRepository.findByIdCursoEtapaGrupoCursoAndIdCursoEtapaGrupoEtapa(curso, etapa);
 		
 		if (listaGrupo.isEmpty())
 		{
@@ -177,7 +177,7 @@ public class MatriculasController
 		
 		CursoEtapaGrupoEntity cursoEtapaGrupo = new CursoEtapaGrupoEntity();
 		
-		List<CursoEtapaGrupoEntity> listaGrupos = this.iCursoEtapaGrupoRepository.findGrupoByCursoAndEtapaOrderByGrupoAsc(curso, etapa);
+		List<CursoEtapaGrupoEntity> listaGrupos = this.iCursoEtapaGrupoRepository.findByIdCursoEtapaGrupoCursoAndIdCursoEtapaGrupoEtapaOrderByIdCursoEtapaGrupoGrupoAsc(curso, etapa);
 		
 		if (listaGrupos.isEmpty())
 		{
@@ -318,7 +318,7 @@ public class MatriculasController
 		
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE ,value = "/Alumnos")
+	@RequestMapping(method = RequestMethod.DELETE ,value = "/Grupos")
 	public ResponseEntity<?>borrarGrupo(
 											@RequestParam(required = true)char grupo,
 											@RequestParam(required = true)String etapa,

@@ -11,7 +11,7 @@ import es.iesjandula.MatriculasHorarios.models.ids.IdCursoEtapaGrupo;
 @Repository
 public interface ICursoEtapaGrupoRepository extends JpaRepository<CursoEtapaGrupoEntity, IdCursoEtapaGrupo>
 {
-	List<CursoEtapaGrupoEntity> findGrupoByCursoAndEtapa(int curso, String etapa);
+	List<CursoEtapaGrupoEntity> findByIdCursoEtapaGrupoCursoAndIdCursoEtapaGrupoEtapa(int curso, String etapa);
 	
-	List<CursoEtapaGrupoEntity> findGrupoByCursoAndEtapaOrderByGrupoAsc(int curso, String etapa);
+	List<CursoEtapaGrupoEntity> findByIdCursoEtapaGrupoCursoAndIdCursoEtapaGrupoEtapaOrderByIdCursoEtapaGrupoGrupoAsc(int curso, String etapa);
 }
