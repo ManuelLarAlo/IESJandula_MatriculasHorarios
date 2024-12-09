@@ -1,0 +1,343 @@
+{
+	"info": {
+		"_postman_id": "f1293329-be5c-4dbe-8b62-ef907f09d1ab",
+		"name": "Postman Pruebas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40309543"
+	},
+	"item": [
+		{
+			"name": "SubirCursos",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "csv",
+							"type": "file",
+							"src": "/C:/Users/nerog/Downloads/CursoEtapa.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/Matriculas/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Matriculas",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SubirAlumnos",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "curso",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "etapa",
+						"value": "Primaria",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "csv",
+							"type": "file",
+							"src": "/C:/Users/nerog/Downloads/DatosBrutoAlumnoMatricula.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/Matriculas/cargaAlumnos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Matriculas",
+						"cargaAlumnos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ObtenerCursos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/Matriculas/Cursos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Matriculas",
+						"Cursos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ObtenerAlumnos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/Matriculas/Alumnos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Matriculas",
+						"Alumnos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ObtenerGrupos",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "curso",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "etapa",
+						"value": "Primaria",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/Matriculas/Grupos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Matriculas",
+						"Grupos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearGrupo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "curso",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "etapa",
+						"value": "ESO",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/Matriculas/crearGrupo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Matriculas",
+						"crearGrupo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SubirAlumnos2Tabla",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "csv",
+							"type": "file",
+							"src": "/C:/Users/nerog/Downloads/DatosBrutoAlumnoMatricula.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/Matriculas/cargaAlumnos2tabla",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Matriculas",
+						"cargaAlumnos2tabla"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ObtenerAlumnosPorGrupo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "curso",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "etapa",
+						"value": "Primaria",
+						"type": "text"
+					},
+					{
+						"key": "grupo",
+						"value": "B",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/Matriculas/GruposAlumnos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Matriculas",
+						"GruposAlumnos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AsignarGrupoAlumno",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "curso",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "etapa",
+						"value": "Primaria",
+						"type": "text"
+					},
+					{
+						"key": "grupo",
+						"value": "B",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"id\": 68,\r\n    \"nombre\": \"María\",\r\n    \"apellidos\": \"Gómez Martínez\",\r\n    \"asignatura\": \"Matemáticas\",\r\n    \"cursoEtapaGrupo\": {\r\n      \"idCursoEtapaGrupo\": {\r\n        \"curso\": null,\r\n        \"etapa\": null,\r\n        \"grupo\": null\r\n      }\r\n    }\r\n  }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/Matriculas/GruposAlumnos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Matriculas",
+						"GruposAlumnos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BorrarAlumno",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n\"id\": 2,\r\n\"nombre\": \"María\",\r\n\"apellidos\": \"Gómez Martínez\",\r\n\"asignatura\": \"Matemáticas\",\r\n\"cursoEtapaGrupo\": {\r\n    \"idCursoEtapaGrupo\": {\r\n    \"curso\": 1,\r\n    \"etapa\": \"Primaria\",\r\n    \"grupo\": \"B\"\r\n    }\r\n}\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/Matriculas/Alumnos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Matriculas",
+						"Alumnos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/Matriculas/Grupos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Matriculas",
+						"Grupos"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

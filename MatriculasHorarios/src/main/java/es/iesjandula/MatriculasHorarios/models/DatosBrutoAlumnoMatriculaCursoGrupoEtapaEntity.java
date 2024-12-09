@@ -1,5 +1,7 @@
 package es.iesjandula.MatriculasHorarios.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,5 +35,6 @@ public class DatosBrutoAlumnoMatriculaCursoGrupoEtapaEntity
     private String asignatura;
 
     @ManyToOne
+    @JsonBackReference
     private CursoEtapaGrupoEntity cursoEtapaGrupo;
 }

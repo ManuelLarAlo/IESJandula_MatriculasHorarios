@@ -2,6 +2,8 @@ package es.iesjandula.MatriculasHorarios.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import es.iesjandula.MatriculasHorarios.models.ids.IdCursoEtapa;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.EmbeddedId;
@@ -27,5 +29,6 @@ public class CursoEtapaEntity
     private IdCursoEtapa idCursoEtapa;
 
     @OneToMany(mappedBy = "cursoEtapa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<DatosBrutoAlumnoMatriculaEntity> datosBrutosAlumnosMatriculados;
 }
