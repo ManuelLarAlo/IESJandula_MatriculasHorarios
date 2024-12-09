@@ -2,13 +2,10 @@ package es.iesjandula.MatriculasHorarios.RestController;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
-import org.apache.tomcat.util.json.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
 
 import es.iesjandula.MatriculasHorarios.models.CursoEtapaEntity;
 import es.iesjandula.MatriculasHorarios.models.CursoEtapaGrupoEntity;
@@ -54,14 +49,21 @@ public class MatriculasController
 	private IDatosBrutoAlumnoMatriculaCursoEtapaGrupo iDatosBrutoAlumnoMatriculaCursoEtapaGrupo;
 	
 	
+	/**
+	 * Endpoint se encarga de subir a la base de datos los cursos
+	 * @param csv
+	 * @return
+	 * @throws MatriculasException
+	 */
 	@RequestMapping( method = RequestMethod.POST,value = "/upload",consumes = "multipart/form-data")
 	public ResponseEntity <?> uploadCursos(
 			@RequestPart( value = "csv") MultipartFile csv) throws MatriculasException
 	{
+		Scanner scanner = null;
 		File file=(File) csv;
 		try
 		{
-			Scanner scanner = new Scanner(file);
+			scanner = new Scanner(file);
 			scanner.nextLine();
 			while (scanner.hasNextLine())
 			{
@@ -74,37 +76,51 @@ public class MatriculasController
 				cursoEtapaEntity.setIdCursoEtapa(idCursoEtapa);
 				this.iCursoRepository.saveAndFlush(cursoEtapaEntity);
 			}
+			return ResponseEntity.ok().build();
+
 		}
-		catch(Exception exception)
+		catch (FileNotFoundException fileNotFoundException) 
 		{
-			return ResponseEntity.status(500).body("Error de servidor"+exception);
+			String error = "Error el archivo no existe";
+			log.error(fileNotFoundException.getMessage());
+			return ResponseEntity.status(500).body(error);
 		}
-		return ResponseEntity.ok().body(200);
+		finally 
+		{
+			if(scanner!= null)
+			{
+				scanner.close();
+			}
+		}
+		
 	}
 	
 	/**
 	 * Endpoint que se encarga de subir los alumnos a la base de datos cargados desde el csv
-	 * @param curso
-	 * @param etapa
-	 * @param csv
+	 * @param curso curso del alumno
+	 * @param etapa etapa educativa
+	 * @param csv   csv en el cual estan todos los alumnos
+	 * @return devuelve 200 si se ha cargado correctamente
 	 */
 	@RequestMapping(method = RequestMethod.POST,value = "/cargaAlumnos", consumes = "multipart/form-data")
-	public void cargaMatriculas(
+	public ResponseEntity<?> cargaMatriculas(
 								@RequestHeader(required = true) int curso,
 								@RequestHeader(required = true) String etapa,
 								@RequestPart( value = "csv") MultipartFile csv) 
 	{
+		Scanner scanner = null;
 		IdCursoEtapa idCursoEtapa         = new IdCursoEtapa();
 		CursoEtapaEntity cursoEtapaEntity = new CursoEtapaEntity();
 		DatosBrutoAlumnoMatriculaEntity datosBrutoAlumnoMatriculaEntity = new DatosBrutoAlumnoMatriculaEntity();
 		try 
 		{
+			
 			File file=(File) csv;
 			//rellenamos el la clave primaria de la tabla CursoEntity
 			idCursoEtapa.setCurso(curso);
 			idCursoEtapa.setEtapa(etapa);
 			cursoEtapaEntity.setIdCursoEtapa(idCursoEtapa);
-			Scanner scanner = new Scanner(file);
+			scanner = new Scanner(file);
 			// PARSEAMOS LA FECHA CON UN FORMATO ESPECIFICO
 			scanner.nextLine();
 			while (scanner.hasNextLine())
@@ -118,10 +134,20 @@ public class MatriculasController
 				datosBrutoAlumnoMatriculaEntity.setCursoEtapa(cursoEtapaEntity);
 				this.iDatosBrutoAlumnoMatricula.saveAndFlush(datosBrutoAlumnoMatriculaEntity); 	
 			}
+			return ResponseEntity.status(200).body("Alumnos cargados correctamente");
 		} 
-		catch (FileNotFoundException e) 
+		catch (FileNotFoundException fileNotFoundException) 
 		{
-			e.printStackTrace();
+			String error = "Error el archivo no existe";
+			log.error(fileNotFoundException.getMessage());
+			return ResponseEntity.status(500).body(error);
+		}
+		finally 
+		{
+			if(scanner!= null)
+			{
+				scanner.close();
+			}
 		}
 	}
 	
@@ -129,50 +155,53 @@ public class MatriculasController
 	 * 
 	 */
 	@RequestMapping(method = RequestMethod.GET,value = "/Cursos")
-	public ResponseEntity <?> obtenerCursos() throws MatriculasException
+	public ResponseEntity <?> obtenerCursos()
 	{
 		List<CursoEtapaEntity>listaCursos = this.iCursoRepository.findAll();
 		
 		if (listaCursos.isEmpty())
 		{
-			throw new MatriculasException(404, "No se ha encontrado ningun Curso");
+			return ResponseEntity.status(404).body("No se han cargado los cursos");
 		}
 		
-		return ResponseEntity.status(200).body(listaCursos);
+		return ResponseEntity.ok().body(listaCursos);
 	}
 	/**
 	 * 
 	 */
 	@RequestMapping(method = RequestMethod.GET,value = "/Alumnos")
-	public ResponseEntity <?> obtenerAlumnos()throws MatriculasException
+	public ResponseEntity <?> obtenerAlumnos()
 	{
 		List<DatosBrutoAlumnoMatriculaEntity> ListadatosBrutoAlumnoMatriculaList= this.iDatosBrutoAlumnoMatricula.findAll();
 		
 		if (ListadatosBrutoAlumnoMatriculaList.isEmpty())
 		{
-			throw new MatriculasException(404, "No se ha encontrado ningun Alumno");
+			return ResponseEntity.status(404).body("No se ha encontrado ningun Alumno");
 		}
 		
 		return ResponseEntity.status(200).body(ListadatosBrutoAlumnoMatriculaList);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET,value = "/Grupos")
-	public ResponseEntity <?> obtenerGrupos(@RequestHeader(required = true) int curso,
-			   @RequestHeader(required = true) String etapa) throws MatriculasException
+	public ResponseEntity <?> obtenerGrupos(
+												@RequestHeader(required = true) int curso,
+												@RequestHeader(required = true) String etapa
+										    ) 
 	{
 		List<CursoEtapaGrupoEntity>listaGrupo = this.iCursoEtapaGrupoRepository.findByIdCursoEtapaGrupoCursoAndIdCursoEtapaGrupoEtapa(curso, etapa);
 		
 		if (listaGrupo.isEmpty())
 		{
-			throw new MatriculasException(404, "No se ha encontrado ningun grupo");
+			return ResponseEntity.status(404).body("No se ha encontrado ningun Grupo");
 		}
 		
 		return ResponseEntity.status(200).body(listaGrupo);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST,value = "/crearGrupo")
-	public ResponseEntity<String> crearGrupo(@RequestHeader(required = true) int curso,
-						   @RequestHeader(required = true) String etapa) throws MatriculasException
+	public ResponseEntity<String> crearGrupo(
+												@RequestHeader(required = true) int curso,
+												@RequestHeader(required = true) String etapa)
 	{
 		
 		CursoEtapaGrupoEntity cursoEtapaGrupo = new CursoEtapaGrupoEntity();
@@ -192,10 +221,10 @@ public class MatriculasController
 			char ultimaLetra = cursoEtapaGrupo.getIdCursoEtapaGrupo().getGrupo();
 			
 			ultimaLetra ++;
-			
-			if (ultimaLetra >= 'Z')
+			//mayor que z solo
+			if (ultimaLetra > 'Z')
 			{
-				throw new MatriculasException(404, "No se pueden crear más grupos en este curso y etapa");
+				return ResponseEntity.status(404).body("No se pueden crear más grupos en este curso y etapa");
 			}
 			
 			IdCursoEtapaGrupo idCursoEtapaGrupo = new IdCursoEtapaGrupo(curso, etapa, ultimaLetra);
